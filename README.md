@@ -2,7 +2,7 @@ Suriel Aido teruel.
 
 Class economic_analysis: 
 -
-  Contains the neccesary method to do an economic analysis based in the study case presented.
+  Contains the neccesary methods to do an economic analysis based in the study case presented.
   
 Methods:
 - 
