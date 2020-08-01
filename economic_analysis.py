@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from numpy_financial import pmt, ipmt, ppmt, npv, irr
 import numpy_financial
-
+import matplotlib.pyplot as plt
 
 class economic_analysis:
 
@@ -160,6 +160,18 @@ class economic_analysis:
         correlation = 6900 + 206 * caudal ** 0.9
         return int(correlation)
 
+    def payback(self, cash_flow):
+        cash_flow_by_years = np.asarray(cash_flow)
+        years = 1
+        for cash in cash_flow_by_years:
+            if cash < 0:
+                years = years + 1
+            if cash >= 0:
+                years = years
+                break
+        return years
+
+
     def execute(self):
 
         # Calculating capital costs (CAPEX)
@@ -246,6 +258,7 @@ class economic_analysis:
                              columns=[i for i in range(len(npvArr))])
 
         # Printing results
+
         print("The Internal Rate of Return (IIR) is: " + str(irr))
         print("We go to see the Net Present Value as a Data Frame: ")
         print(npvRet)
@@ -253,6 +266,20 @@ class economic_analysis:
         print(df)
         print(
             f"The project has a net present value of {'{:,.2f}'.format(npv)}€ and an internal rate of return of {round(irr * 100, 2)}%")
+
+        # Showing using matplotlib
+        plt.plot(cumulative_cash_flow, label="Cumulative cash flow")
+        plt.plot(cash_flow, 'ks', label="Cash flow")
+        plt.plot(sales_array, 'bo', label="Incomings")
+        plt.plot(npvArr, label="Net Present Value")
+        plt.plot(loan_prin, 'r*', label="Outgoings")
+        plt.xlabel("Year")
+        plt.ylabel("€")
+        plt.legend()
+        plt.show()
+
+        # Exportamos a Excel los resultados
+        df.to_excel(r'results.xlsx', index=True)
 
 prueba = economic_analysis()
 prueba.execute()
