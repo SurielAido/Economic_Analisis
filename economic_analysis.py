@@ -36,17 +36,7 @@ class economic_analysis:
         if p < 10 or p > 70:
             print(f"    - WARNING: boiler pressure out of method bounds, 10 < p < 70. Results may not be accurate.")
 
-        if Q < 20000:
-            C = 106000 + 8.7 * Q
-        elif Q < 200000:
-            if p < 15:
-                C = 110000 + 4.5 * Q ** 0.9
-            elif p < 40:
-                C = 106000 + 8.7 * Q
-            else:
-                C = 110000 + 4.5 * Q ** 0.9
-        else:
-            C = 110000 + 4.5 * Q ** 0.9
+        C = self.boiler_correlation(Q, p)
 
         if installed:
             C *= ((1 + self.Capital_factors.loc["fp"]["Fluids"]) * fm + (
@@ -66,7 +56,7 @@ class economic_analysis:
         if Q < 0.2 or Q > 126:
             print(f"    - WARNING: pump caudal out of method bounds, 0.2 < Q (L/s) < 126. Results may not be accurate.")
 
-        C = 6900 + 206 * Q ** 0.9
+        C = self.pump_correlation(Q)
 
         if installed:
             C *= ((1 + self.Capital_factors.loc["fp"]["Fluids"]) * fm + (
@@ -86,7 +76,7 @@ class economic_analysis:
             print(
                 f"    - WARNING: steam turbine power out of method bounds, 100 < kW < 20000. Results may not be accurate.")
 
-        C = -12000 + 1630 * kW ** 0.75
+        C = self.turbine_correlation(kW)
 
         if installed:
             C *= ((1 + self.Capital_factors.loc["fp"]["Fluids"]) * fm + (
@@ -146,6 +136,29 @@ class economic_analysis:
         cost = cost_ref * ((cap/cap_ref)**n)
 
         return cost
+
+    def boiler_correlation(self, valor_production, pressure):
+        if valor_production < 20000:
+            correlation = 106000 + 8.7 * valor_production
+        elif valor_production < 200000:
+            if pressure < 15:
+                correlation = 110000 + 4.5 * valor_production ** 0.9
+            elif pressure < 40:
+                correlation = 106000 + 8.7 * valor_production
+            else:
+                correlation = 110000 + 4.5 * valor_production ** 0.9
+        else:
+            correlation = 110000 + 4.5 * valor_production ** 0.9
+
+        return int(correlation)
+
+    def turbine_correlation(self, power):
+        correlation = -12000 + 1630 * power ** 0.75
+        return int(correlation)
+
+    def pump_correlation(self, caudal):
+        correlation = 6900 + 206 * caudal ** 0.9
+        return int(correlation)
 
     def execute(self):
 
