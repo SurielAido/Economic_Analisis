@@ -234,9 +234,25 @@ class economic_analysis:
         npv = numpy_financial.npv(discount_rate, cash_flow)
         irr = numpy_financial.irr(cash_flow)
 
+        npvArr = np.asarray(cash_flow)
+        npvRet = []
+
+        for n in npvArr:
+            auxInt = (n/(1+discount_rate)**np.arange(0, len(npvArr)))
+            npvRet.append(auxInt)
+
+        npvDF = pd.DataFrame(npvRet,
+                             index=[i for i in range(len(npvArr))],
+                             columns=[i for i in range(len(npvArr))])
+
         # Printing results
-        print(type(npv))
-        print(type(irr))
+        print("The Internal Rate of Return (IIR) is: " + str(irr))
+        print("We go to see the Net Present Value as a Data Frame: ")
+        print(npvRet)
+        print("\nWe go to see df: ")
         print(df)
         print(
             f"The project has a net present value of {'{:,.2f}'.format(npv)}€ and an internal rate of return of {round(irr * 100, 2)}%")
+
+prueba = economic_analysis()
+prueba.execute()
