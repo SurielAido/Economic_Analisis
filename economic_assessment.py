@@ -189,7 +189,7 @@ if __name__ == '__main__':
 
     data = np.vstack((investment, sales_array, depreciation, loan_prin, loan_int, salaries_array, water_array, ebt, 
                       taxes, eat, cash_flow, cumulative_cash_flow))
-    df   = pd.DataFrame(data,
+    df = pd.DataFrame(data,
                         index=['Investment', 'Sales', 'Depreciation', 'Loan principal', 'Loan interest', 'Salaries',
                                'Water', 'EBT', 'Taxes', 'EAT', 'Cash Flow', 'Cumulative Cash Flow'],
                         columns=[i for i in range(years)])
