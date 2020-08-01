@@ -280,6 +280,3 @@ class economic_analysis:
 
         # Exportamos a Excel los resultados
         df.to_excel(r'results.xlsx', index=True)
-
-prueba = economic_analysis()
-prueba.execute()
